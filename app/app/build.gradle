@@ -46,14 +46,17 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.3.1"
 
-// Barcode model dependencies
+    // Barcode model dependencies
     implementation 'com.google.mlkit:barcode-scanning:16.0.1'
 
-// CameraX dependencies
+    // CameraX dependencies
     implementation "androidx.camera:camera-camera2:1.0.0-beta06"
     implementation "androidx.camera:camera-lifecycle:1.0.0-beta06"
     implementation "androidx.camera:camera-view:1.0.0-alpha13"
+
+    //datastore dependency
+    implementation "androidx.datastore:datastore:1.0.0"
 }

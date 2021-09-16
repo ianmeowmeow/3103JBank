@@ -1,7 +1,9 @@
 package com.jbank.jbankauth
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -63,8 +65,6 @@ class ScanActivity : AppCompatActivity() {
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
             .build()
         preview.setSurfaceProvider(previewView!!.createSurfaceProvider())
-        val camera: Camera =
-            cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview)
         val imageAnalysis = ImageAnalysis.Builder()
             .setTargetResolution(Size(1280, 720))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -99,17 +99,24 @@ class ScanActivity : AppCompatActivity() {
 
         barcodeScanner.process(inputImage)
             .addOnSuccessListener { barcodes ->
-                barcodes.forEach {
-                    Log.d(ContentValues.TAG, it.rawValue.toString())
+                if (barcodes.size > 0) {
+                    sendBackResult(barcodes[0].rawValue.toString())
+                    finish()
                 }
             }
             .addOnFailureListener {
-                Log.e(ContentValues.TAG, it.message.toString())
+                sendBackResult("")
+                finish()
             }.addOnCompleteListener {
-                // When the image is from CameraX analysis use case, must call image.close() on received
-                // images when finished using them. Otherwise, new images may not be received or the camera
-                // may stall.
                 imageProxy.close()
             }
+    }
+    private fun sendBackResult(secret: String)
+    {
+        val intent = Intent().apply {
+            putExtra(getString(R.string.secret), secret)
+            // Put your data here if you want.
+        }
+        setResult(Activity.RESULT_OK, intent)
     }
 }
